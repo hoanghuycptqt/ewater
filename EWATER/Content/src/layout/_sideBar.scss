@@ -1,0 +1,86 @@
+﻿/*sidebar navigation*/
+#sidebar {
+    width: 260px;
+    height: 100%;
+    position: fixed;
+    background: #424a5d;
+    transition: margin-left 0.1s ease;
+
+    h5 {
+        color: #f2f2f2;
+        font-weight: 700;
+    }
+
+    ul li {
+        position: relative;
+    }
+
+    .sub-menu > .sub li {
+        padding-left: 44px;
+
+        &:last-child {
+            padding-bottom: 10px;
+        }
+    }
+}
+
+.nav-collapse.collapse {
+    display: inline;
+}
+
+
+.sidebar-menu {
+    padding: 0;
+    margin-top: 60px;
+
+    li {
+
+        a {
+            span {
+                display: inline-block;
+            }
+
+            color: #dadcdf;
+            text-decoration: none;
+            display: block;
+            padding: 15px 0 15px 15px;
+            font-size: 12px;
+            outline: none;
+            -webkit-transition: all 0.3s ease;
+            -moz-transition: all 0.3s ease;
+            -o-transition: all 0.3s ease;
+            -ms-transition: all 0.3s ease;
+            transition: all 0.3s ease;
+
+            &.active, &:hover, &:focus {
+                background: #3886bc;
+                color: #fff;
+                display: block;
+                -webkit-transition: all 0.3s ease;
+                -moz-transition: all 0.3s ease;
+                -o-transition: all 0.3s ease;
+                -ms-transition: all 0.3s ease;
+                transition: all 0.3s ease;
+            }
+
+            i {
+                font-size: 15px;
+                padding-right: 10px;
+
+                &.fa-angle-right {
+                    float: right;
+                    font-size: 12px;
+                    padding-right: 0;
+                    position: relative;
+                    left: -15px;
+                    transform: rotate(0);
+                    transition: transform 0.2s;
+                }
+            }
+
+            &:hover i, &:focus i {
+                color: #fff;
+            }
+        }
+    }
+}

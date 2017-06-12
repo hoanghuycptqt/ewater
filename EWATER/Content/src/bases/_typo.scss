@@ -1,0 +1,48 @@
+﻿.light {
+    font-weight: 400;
+}
+
+/* --- section bg var --- */
+
+.bg-white {
+    background: #fff;
+}
+
+.bg-gray {
+    background: #f8f8f8;
+}
+
+
+.bg-dark {
+    background: #575757;
+}
+
+/* --- section color var --- */
+
+.text-light {
+    color: #fff;
+}
+
+.text-italic {
+    font-style: italic;
+}
+
+#text {
+    color: #fff;
+    background: #ffcc00;
+}
+
+#map {
+    height: 500px;
+}
+
+.link {
+    color: $color-primary;
+    padding-left: 0;
+    transition: padding-left 0.3s ease;
+
+    &:hover {
+        padding-left: 5px;
+        color: $color-primary;
+    }
+}

@@ -1,0 +1,214 @@
+﻿
+@{
+    ViewBag.Title = "Customers";
+}
+
+<section id="container" ng-controller="AdCustomerController">
+    <!-- **********************************************************************************************************************************************************
+    TOP BAR CONTENT & NOTIFICATIONS
+    *********************************************************************************************************************************************************** -->
+    <!--header start-->
+    <header class="header black-bg">
+
+        <div class="logo">
+            <a href="~/AdDashboard/" target="_self" class="logo-text"><b>Admin Site</b></a>
+            <div class="sidebar-toggle-box">
+                <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+            </div>
+        </div>
+
+        <div class="top-menu">
+            <span class="page-title">Customer</span>
+            <a class="btn btn-logout pull-right" href="login.html">Logout</a>
+        </div>
+    </header>
+    <!--header end-->
+    <!-- **********************************************************************************************************************************************************
+    MAIN SIDEBAR MENU
+    *********************************************************************************************************************************************************** -->
+    <!--sidebar start-->
+    <aside>
+        <div id="sidebar" class="nav-collapse">
+            <ul class="sidebar-menu" id="nav-accordion">
+                <li>
+                    <a href="~/AdDashboard/" target="_self">
+                        <i class="fa fa-dashboard"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="~/AdProduct/" target="_self">
+                        <i class="fa fa-list"></i>
+                        <span>Product</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="active" href="~/AdCustomer/" target="_self">
+                        <i class="fa fa-users"></i>
+                        <span>Customer</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="~/AdStaff/" target="_self">
+                        <i class="fa fa-user"></i>
+                        <span>Staff</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="~/AdReport/" target="_self">
+                        <i class="fa fa-table"></i>
+                        <span>Report</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+    <!--sidebar end-->
+    <!-- **********************************************************************************************************************************************************
+    MAIN CONTENT
+    *********************************************************************************************************************************************************** -->
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+            <div growl></div>
+            <div class="row mt">
+                <div class="col-md-12">
+                    <div class="content-panel">
+                        <div class="table-header">
+                            <h4 class="header-title">Customer List</h4>
+                            <a class="btn btn-add" href="#" ng-click="addCust()">
+                                <i class="icon fa fa-plus""></i>Add Customer
+                            </a>
+                        </div>
+
+                        <table class="table table-striped table-advance table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Customer Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Address</th>
+                                    <th>Total</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="custModel in ListCustomer.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))">
+                                    <td><a href="#">{{custModel.CustomerName}}</a></td>
+                                    <td>{{custModel.CustomerEmail}}</td>
+                                    <td>{{custModel.PhoneNumber}}</td>
+                                    <td>{{custModel.Address}} - {{custModel.Ward}}</td>
+                                    <td></td>
+                                    <td>
+                                        <button ng-click="updateCust(custModel)" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></button>
+                                        <button ng-click="deleteCustomer(custModel)" class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <ul uib-pagination total-items="ListCustomer.length" ng-model="currentPage" class="pagination-sm" items-per-page="itemsPerPage"></ul>
+                </div>
+            </div>
+
+        </section>
+    </section>
+
+</section>
+
+<!-- Modal -->
+    <script type="text/ng-template" id="myModal.html">
+                <div class="modal-content">
+                    <div class="modal-header">                       
+                        <h4 class="modal-title" id="myModalLabel">Thêm Khách Hàng Mới</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form name="form">
+                            <div class="form-group">
+                                <label for="name">Tên Khách Hàng</label>
+                                <input type="text" name="name" ng-model="custModel.CustomerName" class="form-control" id="name" placeholder="Tên Khách Hàng" required>
+                                <i class="fa fa-check text-success" ng-show="form.name.$dirty && form.name.$valid"></i>
+                                <div ng-show="form.name.$dirty && form.name.$invalid" class="text-danger">
+                                    <i class="fa fa-times text-danger"></i>
+                                    <span ng-show="form.name.$error.required">Bạn chưa nhập tên</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" name="email" ng-model="custModel.CustomerEmail" class="form-control" id="email" placeholder="Email" required>
+                                <i class="fa fa-check text-success" ng-show="form.email.$dirty && form.email.$valid"></i>
+                                <div ng-show="form.email.$dirty && form.email.$invalid" class="text-danger">
+                                    <i class="fa fa-times text-danger"></i>
+                                    <span ng-show="form.email.$error.required">Bạn chưa nhập địa chỉ email</span>
+                                    <span ng-show="form.email.$error.email">Không đúng định dạng email</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Số điện thoại</label>
+                                <input type="tel" name="tel" ng-model="custModel.PhoneNumber" class="form-control" id="phone" placeholder="Số điện thoại" ng-pattern="/^[0-9]*$/" required>
+                                <i class="fa fa-check text-success" ng-show="form.tel.$dirty && form.tel.$valid"></i>
+                                <div ng-show="form.tel.$dirty && form.tel.$invalid" class="text-danger">
+                                    <i class="fa fa-times text-danger"></i>
+                                    <span ng-show="form.tel.$error.required">Bạn chưa nhập số điện thoại</span>
+                                    <span ng-show="form.tel.$error.pattern">Chỉ có thể nhập số  </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Địa chỉ</label>
+                                <input type="tel" name="address" ng-model="custModel.Address" class="form-control" id="address" placeholder="Số nhà, tên đường" required>
+                                <i class="fa fa-check text-success" ng-show="form.address.$dirty && form.address.$valid"></i>
+                                <div ng-show="form.address.$dirty && form.address.$invalid" class="text-danger">
+                                    <i class="fa fa-times text-danger"></i>
+                                    <span ng-show="form.address.$error.required">Bạn chưa nhập địa chỉ</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Phường</label>
+                                <select class="form-control" name="ward" ng-model="custModel.Ward" required>
+                                    <option>Phường 1</option>
+                                    <option>Phường 2</option>
+                                    <option>Lộc Phát</option>
+                                    <option>Lộc Tiến</option>
+                                    <option>Lộc Thanh</option>
+                                    <option>B' Lao</option>
+                                    <option>Đại Lào</option>
+                                    <option>Đạm Bri</option>
+                                    <option>Lộc Châu</option>
+                                    <option>Lộc Nga</option>
+                                    <option>Lộc Sơn</option>
+                                </select>
+                                <i class="fa fa-check text-success" ng-show="form.ward.$dirty && form.ward.$valid"></i>
+                                <div ng-show="form.ward.$dirty && form.ward.$invalid" class="text-danger">
+                                    <i class="fa fa-times text-danger"></i>
+                                    <span ng-show="form.ward.$error.required">Bạn chưa chọn phường</span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" ng-click="cancel()" class="btn btn-close" data-dismiss="modal">Hủy</button>
+                        <button type="button" ng-click="ok()" class="btn btn-primary" ng-disabled="!form.$dirty || (form.$dirty && form.$invalid)">{{action}}</button>
+                    </div>
+                </div>
+    </script>
+    
+    <script type="text/ng-template" id="myModalDelete.html">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Confirm</h4>
+            </div>
+            <div class="modal-body">
+                <span>Bạn có chắc chắn xóa ?</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-click="cancel()" class="btn btn-close" data-dismiss="modal">Không</button>
+                <button type="button" ng-click="ok()" class="btn btn-primary">Xóa</button>
+            </div>
+        </div>
+    </script>
+    @section JavaScript{
+        <script src="~/Scripts/angular.js"> </script>
+        <script src="~/Scripts/angular-ui/ui-bootstrap-tpls.min.js"></script>
+        <script src="~/ScriptsNg/AdCustomerController.js"></script>
+        <script src="~/Scripts/angular-growl.js"></script> 
+    }

@@ -1,0 +1,50 @@
+﻿.modal-header {
+    //background: #3886bc;
+    border-bottom: none;
+}
+
+.modal-title {    
+
+    .nav-tabs > li {
+        .link {
+            color: #555;
+        }
+
+        &.active {
+            .link {
+                color: #4cae4c;
+            }
+        }
+    }
+}
+
+.modal-content {
+    .mb {
+        margin-bottom: 15px;
+    }
+
+    .checkbox {
+        margin-top: 0;
+    }
+
+    input[type="checkbox"] {
+        margin-top: 2px;
+    }
+
+    .label-title {
+        padding-top: 9px;
+    }
+
+    .form-control {
+        font-size: 13px;
+        padding: 6px;
+        position: relative;
+    }
+
+    .fa-calendar {
+        position: absolute;
+        top: 8px;
+        right: 25px;
+        font-size: 17px;
+    }
+}

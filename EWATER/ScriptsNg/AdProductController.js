@@ -1,0 +1,265 @@
+﻿var app = angular.module('myFormApp', ['ui.bootstrap', 'angular-growl', 'ngFileUpload']);
+
+app.config(['growlProvider', function (growlProvider) {
+    growlProvider.globalTimeToLive(1500);
+    growlProvider.globalPosition('bottom-right');
+    growlProvider.globalDisableCountDown(true);
+    growlProvider.globalDisableCloseButton(true);
+}]);
+app.filter('vndFormat', function () {
+    return function (input) {
+        return input + ' \u20ab';
+    };
+});
+app.controller('AdProductController', function ($scope, $http, $location, $window, $uibModal, growl) {
+    $scope.productModel = {};
+    $scope.ListProduct = null;
+    getallData();
+    $scope.currentPage = 1;
+    $scope.itemsPerPage = 10;
+    //******=========Get All Customer=========******  
+    function getallData() {
+        $http.get('/AdProduct/GetAllData').then(successCallback, errorCallback);
+
+        function successCallback(data) {
+            $scope.ListProduct = data.data;
+        }
+        function errorCallback(data) {
+            growl.error("Có lỗi trong quá trình gọi xử lý đến server");
+        }
+    };
+    //******=========Get Single Customer=========******  
+    function getProduct(productModel) {
+
+        $http.get('/AdProduct/GetbyID/' + productModel.ProductID).then(successCallback, errorCallback);
+        function successCallback(data) {
+            debugger;
+            $scope.productModel = data.data;
+            getallData();
+        }
+        function errorCallback(data) {
+            growl.error("Có lỗi trong quá trình gọi xử lý đến server");
+        }
+    };
+    //******=========Save Customer=========******  
+    function saveCustomer(productModel) {
+        var getModelAsFormData = function (data) {
+            var dataAsFormData = new FormData();
+            angular.forEach(data, function (value, key) {
+                dataAsFormData.append(key, value);
+            });
+            return dataAsFormData;
+        };
+
+        $http(
+        {
+            method: 'POST',
+            url: '/AdProduct/Insert',
+            data: getModelAsFormData(productModel),
+            transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined }
+        }).then(successCallback, errorCallback);
+
+        function successCallback(data) {
+            if (data.data.success === true) {
+                getallData();
+                growl.success(data.data.message);
+            }
+            else {
+                growl.error(data.data.message);
+            }
+        }
+        function errorCallback(data) {
+            growl.error("Có lỗi trong quá trình gọi xử lý đến server");
+        }
+        getallData();
+
+    };
+    //******=========Edit Customer=========******  
+    function updateProduct(newProduct) {
+        var getModelAsFormData = function (data) {
+            var dataAsFormData = new FormData();
+            angular.forEach(data, function (value, key) {
+                dataAsFormData.append(key, value);
+            });
+            return dataAsFormData;
+        };
+        $http(
+        {
+            method: 'POST',
+            url: '/AdProduct/Update',
+            data: getModelAsFormData(newProduct),
+            transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined }
+        }).then(successCallback, errorCallback);
+
+        function successCallback(data) {
+            if (data.data.success === true) {
+                $scope.productModel = null;
+                getallData();
+                growl.success(data.data.message);
+            }
+            else {
+                growl.error(data.data.message);
+            }
+        }
+        function errorCallback(data) {
+            growl.error("Có lỗi trong quá trình gọi xử lý đến server");
+        }
+    };
+    //******=========Delete Customer=========******  
+    $scope.deleteProduct = function (productModel) {
+
+        var modalInstance = $uibModal.open({
+            templateUrl: 'myModalDelete.html',
+            controller: 'DeleteProduct'
+        });
+
+        modalInstance.result.then(function () {
+            $http.delete('/AdProduct/Delete/' + productModel.ProductID).then(successCallback, errorCallback);
+
+            function successCallback(data) {
+                $scope.errors = [];
+                if (data.data.success === true) {
+                    getallData();
+                    growl.success(data.data.message);
+                }
+                else {
+                    growl.error(data.data.message);
+                }
+            }
+            function errorCallback(data) {
+                growl.error("Có lỗi trong quá trình gọi xử lý đến server");
+            }
+        }, function () {
+            //error
+        });
+
+    };
+
+    $scope.updateProduct = function (productModel) {
+        getProduct(productModel);
+        var modalInstance = $uibModal.open({
+            templateUrl: 'myModal.html',
+            controller: 'UpdateProduct',
+            resolve: {
+                oldProduct: function () {
+                    return $scope.oldProduct = productModel;
+                }
+            }
+        });
+
+        modalInstance.result.then(function (newProduct) {
+            updateProduct(newProduct);
+        }, function () {
+            //error
+        });
+    };
+
+    $scope.addProduct = function () {
+        var modalInstance = $uibModal.open({
+            templateUrl: 'myModal.html',
+            controller: 'AddProduct'
+        });
+
+        modalInstance.result.then(function (newProduct) {
+            saveCustomer(newProduct);
+        }, function () {
+            //error
+        });
+    };
+
+    $scope.base64ArrayBuffer = function(arrayBuffer) {
+        var base64 = ''
+        var encodings = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+
+        var bytes = new Uint8Array(arrayBuffer)
+        var byteLength = bytes.byteLength
+        var byteRemainder = byteLength % 3
+        var mainLength = byteLength - byteRemainder
+
+        var a, b, c, d
+        var chunk
+
+        // Main loop deals with bytes in chunks of 3
+        for (var i = 0; i < mainLength; i = i + 3) {
+            // Combine the three bytes into a single integer
+            chunk = (bytes[i] << 16) | (bytes[i + 1] << 8) | bytes[i + 2]
+
+            // Use bitmasks to extract 6-bit segments from the triplet
+            a = (chunk & 16515072) >> 18 // 16515072 = (2^6 - 1) << 18
+            b = (chunk & 258048) >> 12 // 258048   = (2^6 - 1) << 12
+            c = (chunk & 4032) >> 6 // 4032     = (2^6 - 1) << 6
+            d = chunk & 63               // 63       = 2^6 - 1
+
+            // Convert the raw binary segments to the appropriate ASCII encoding
+            base64 += encodings[a] + encodings[b] + encodings[c] + encodings[d]
+        }
+
+        // Deal with the remaining bytes and padding
+        if (byteRemainder == 1) {
+            chunk = bytes[mainLength]
+
+            a = (chunk & 252) >> 2 // 252 = (2^6 - 1) << 2
+
+            // Set the 4 least significant bits to zero
+            b = (chunk & 3) << 4 // 3   = 2^2 - 1
+
+            base64 += encodings[a] + encodings[b] + '=='
+        } else if (byteRemainder == 2) {
+            chunk = (bytes[mainLength] << 8) | bytes[mainLength + 1]
+
+            a = (chunk & 64512) >> 10 // 64512 = (2^6 - 1) << 10
+            b = (chunk & 1008) >> 4 // 1008  = (2^6 - 1) << 4
+
+            // Set the 2 least significant bits to zero
+            c = (chunk & 15) << 2 // 15    = 2^4 - 1
+
+            base64 += encodings[a] + encodings[b] + encodings[c] + '='
+        }
+
+        return base64
+    }
+
+}).config(function ($locationProvider) {
+    $locationProvider.html5Mode(true);
+});
+
+app.controller('UpdateProduct', function ($scope, $uibModalInstance, oldProduct) {
+    $scope.action = "Lưu";
+    $scope.productModel = oldProduct;
+    $scope.ok = function () {
+        //it close the modal and sends the result to controller
+        $uibModalInstance.close($scope.productModel);
+    };
+    $scope.cancel = function () {
+        //it dismiss the modal 
+        $uibModalInstance.dismiss('cancel');
+    };
+});
+
+app.controller('AddProduct', function ($scope, $uibModalInstance) {
+    $scope.action = "Thêm";
+    $scope.ok = function () {
+        //it close the modal and sends the result to controller
+        $uibModalInstance.close($scope.productModel);
+    };
+    $scope.cancel = function () {
+        //it dismiss the modal 
+        $uibModalInstance.dismiss('cancel');
+    };
+});
+
+app.controller('DeleteProduct', function ($scope, $uibModalInstance) {
+    $scope.ok = function () {
+        //it close the modal and sends the result to controller
+        $uibModalInstance.close();
+    };
+    $scope.cancel = function () {
+        //it dismiss the modal 
+        $uibModalInstance.dismiss('cancel');
+    };
+});
+
+
+

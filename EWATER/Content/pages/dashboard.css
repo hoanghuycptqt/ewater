@@ -1,0 +1,85 @@
+﻿.wrapper > .row {
+  margin-top: 20px; }
+
+.analytics .header-title {
+  float: none; }
+
+.report-chart {
+  padding: 10px; }
+
+.report-statistics {
+  margin: 20px 0; }
+
+.recent-orders .status-processed td {
+  background: #c5fcca; }
+
+.recent-orders .status-pending td {
+  background: #fcbdbd; }
+
+.statistics-block {
+  overflow: hidden;
+  border-radius: 2px;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.1);
+  padding: 20px 15px;
+  color: #fff; }
+  .statistics-block .icon {
+    float: left;
+    font-size: 20px;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid transparent;
+    transition: all 0.3s ease; }
+  .statistics-block .counter {
+    float: right;
+    text-align: right; }
+    .statistics-block .counter .counter-number {
+      font-size: 18px; }
+  .statistics-block:hover .icon {
+    border-color: #fff;
+    background: rgba(255, 255, 255, 0.3); }
+
+.order-info {
+  border-top: 1px solid #e5e5e5;
+  padding-top: 10px; }
+
+.add-product {
+  overflow: hidden; }
+  .add-product .form-group {
+    width: 45%;
+    display: inline-block;
+    margin-right: 10px;
+    vertical-align: bottom; }
+
+.table-order tfoot td {
+  font-size: 14px;
+  font-weight: bold; }
+
+.order-detail {
+  line-height: 2;
+  overflow: hidden; }
+  .order-detail .detail-label {
+    float: left;
+    display: block;
+    width: 120px;
+    opacity: 0.7; }
+  .order-detail .detail-info {
+    float: left;
+    display: block;
+    width: calc(100% - 120px); }
+
+.form-group {
+  position: relative; }
+  .form-group .fa-check {
+    position: absolute;
+    top: 0;
+    right: 0; }
+  .form-group div.text-danger {
+    position: absolute;
+    top: 0;
+    right: 0; }
+

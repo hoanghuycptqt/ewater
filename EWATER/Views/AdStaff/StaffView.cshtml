@@ -1,0 +1,196 @@
+﻿
+@{
+    ViewBag.Title = "StaffView";
+}
+
+<section id="container" ng-controller="AdStaffController">
+    <!-- **********************************************************************************************************************************************************
+    TOP BAR CONTENT & NOTIFICATIONS
+    *********************************************************************************************************************************************************** -->
+    <!--header start-->
+    <header class="header black-bg">
+
+        <div class="logo">
+            <a href="~/AdDashboard/" target="_self" class="logo-text"><b>Admin Site</b></a>
+            <div class="sidebar-toggle-box">
+                <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+            </div>
+        </div>
+
+        <div class="top-menu">
+            <span class="page-title">Staff</span>
+            <a class="btn btn-logout pull-right" href="login.html">Logout</a>
+        </div>
+    </header>
+    <!--header end-->
+    <!-- **********************************************************************************************************************************************************
+    MAIN SIDEBAR MENU
+    *********************************************************************************************************************************************************** -->
+    <!--sidebar start-->
+    <aside>
+        <div id="sidebar" class="nav-collapse">
+            <ul class="sidebar-menu" id="nav-accordion">
+                <li>
+                    <a href="~/AdDashboard/" target="_self">
+                        <i class="fa fa-dashboard"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="~/AdProduct/" target="_self">
+                        <i class="fa fa-list"></i>
+                        <span>Product</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="~/AdCustomer/" target="_self">
+                        <i class="fa fa-users"></i>
+                        <span>Customer</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="active" href="~/AdStaff/" target="_self">
+                        <i class="fa fa-user"></i>
+                        <span>Staff</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="~/AdReport/" target="_self">
+                        <i class="fa fa-table"></i>
+                        <span>Report</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+    <!--sidebar end-->
+    <!-- **********************************************************************************************************************************************************
+    MAIN CONTENT
+    *********************************************************************************************************************************************************** -->
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+            <div growl></div>
+            <div class="row mt">
+                <div class="col-md-12">
+                    <div class="content-panel">
+                        <div class="table-header">
+                            <h4 class="header-title">Staff List</h4>
+                            <a class="btn btn-add" href="#" ng-click="addStaff()">
+                                <i class="icon fa fa-plus"></i>Add Staff
+                            </a>
+                        </div>
+
+                        <table class="table table-striped table-advance table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Staff Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Job Title</th>
+                                    <th>Sales</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="staffModel in ListStaff.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))">
+                                    <td>{{staffModel.StaffName}}</td>
+                                    <td>{{staffModel.StaffEmail}}</td>
+                                    <td>{{staffModel.StaffPhone}}</td>
+                                    <td>{{staffModel.JobTitle}}</td>
+                                    <td>22000.50$ </td>
+                                    <td>
+                                        <button ng-click="updateStaff(staffModel)" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></button>
+                                        <button ng-click="deleteStaff(staffModel)" class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button>
+                                    </td>
+                                </tr>                                
+                            </tbody>
+                        </table>
+                    </div>
+                    <ul uib-pagination total-items="ListCustomer.length" ng-model="currentPage" class="pagination-sm" items-per-page="itemsPerPage"></ul>
+                </div>
+            </div>
+
+        </section>
+    </section>
+
+
+</section>
+
+<!-- Modal -->
+<script type="text/ng-template" id="myModal.html">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Add New Staff</h4>
+        </div>
+        <div class="modal-body">
+            <form name="form">
+                <div class="form-group">
+                    <label for="name">Staff Name</label>
+                    <input type="text" name="name" ng-model="staffModel.StaffName" class="form-control" id="name" placeholder="Staff Name" required>
+                    <i class="fa fa-check text-success" ng-show="form.name.$dirty && form.name.$valid"></i>
+                    <div ng-show="form.name.$dirty && form.name.$invalid" class="text-danger">
+                        <i class="fa fa-times text-danger"></i>
+                        <span ng-show="form.name.$error.required">Bạn chưa nhập tên</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" ng-model="staffModel.StaffEmail" class="form-control" id="email" placeholder="Email" required>
+                    <i class="fa fa-check text-success" ng-show="form.email.$dirty && form.email.$valid"></i>
+                    <div ng-show="form.email.$dirty && form.email.$invalid" class="text-danger">
+                        <i class="fa fa-times text-danger"></i>
+                        <span ng-show="form.email.$error.required">Bạn chưa nhập địa chỉ email</span>
+                        <span ng-show="form.email.$error.email">Không đúng định dạng email</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="tel" name="tel" ng-model="staffModel.StaffPhone" class="form-control" id="phone" placeholder="Phone" ng-pattern="/^[0-9]*$/" required>
+                    <i class="fa fa-check text-success" ng-show="form.tel.$dirty && form.tel.$valid"></i>
+                    <div ng-show="form.tel.$dirty && form.tel.$invalid" class="text-danger">
+                        <i class="fa fa-times text-danger"></i>
+                        <span ng-show="form.tel.$error.required">Bạn chưa nhập số điện thoại</span>
+                        <span ng-show="form.tel.$error.pattern">Chỉ có thể nhập số  </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="address">Job Title</label>
+                    <input type="text" name="jobtitle" ng-model="staffModel.JobTitle" class="form-control" id="job" placeholder="Job Title" required>
+                    <i class="fa fa-check text-success" ng-show="form.jobtitle.$dirty && form.jobtitle.$valid"></i>
+                    <div ng-show="form.jobtitle.$dirty && form.jobtitle.$invalid" class="text-danger">
+                        <i class="fa fa-times text-danger"></i>
+                        <span ng-show="form.jobtitle.$error.required">Bạn chưa nhập chức vụ</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" ng-click="cancel()" class="btn btn-close" data-dismiss="modal">Close</button>
+            <button type="button" ng-click="ok()" class="btn btn-primary" ng-disabled="!form.$dirty || (form.$dirty && form.$invalid)">{{action}}</button>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="myModalDelete.html">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">Confirm</h4>
+        </div>
+        <div class="modal-body">
+            <span>Bạn có chắc chắn xóa ?</span>
+        </div>
+        <div class="modal-footer">
+            <button type="button" ng-click="cancel()" class="btn btn-close" data-dismiss="modal">Không</button>
+            <button type="button" ng-click="ok()" class="btn btn-primary">Xóa</button>
+        </div>
+    </div>
+</script>
+
+@section JavaScript{
+    <script src="~/Scripts/angular.js"> </script>
+    <script src="~/Scripts/angular-ui/ui-bootstrap-tpls.min.js"></script>
+    <script src="~/ScriptsNg/AdStaffController.js"></script>
+    <script src="~/Scripts/angular-growl.js"></script>   
+}

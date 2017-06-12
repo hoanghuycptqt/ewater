@@ -1,0 +1,438 @@
+﻿
+@{
+    ViewBag.Title = "DashboardView";
+}
+
+<section id="container" ng-controller="AdDashboardController">
+    <header class="header black-bg">
+
+        <div class="logo">
+            <a href="~/AdDashboard/" target="_self" class="logo-text"><b>Admin Site</b></a>
+            <div class="sidebar-toggle-box">
+                <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+            </div>
+        </div>
+
+        <div class="top-menu">
+            <span class="page-title">Dashboard</span>
+            <a class="btn btn-logout pull-right" href="login.html">Logout</a>
+        </div>
+    </header>
+
+    <aside>
+        <div id="sidebar" class="nav-collapse">
+            <ul class="sidebar-menu" id="nav-accordion">
+                <li>
+                    <a class="active" href="~/AdDashboard/" target="_self">
+                        <i class="fa fa-dashboard"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="~/AdProduct/" target="_self">
+                        <i class="fa fa-list"></i>
+                        <span>Product</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="~/AdCustomer/" target="_self">
+                        <i class="fa fa-users"></i>
+                        <span>Customer</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="~/AdStaff/" target="_self">
+                        <i class="fa fa-user"></i>
+                        <span>Staff</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="~/AdReport/" target="_self">
+                        <i class="fa fa-table"></i>
+                        <span>Report</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+
+    <section id="main-content">
+        <section class="wrapper">
+            <div growl></div>
+            <div class="row report-statistics">
+                <div class="col-md-3 padding-left-0">
+                    <div class="statistics-block bg-deep-purple">
+                        <i class="icon fa fa-money"></i>
+                        <div class="counter">
+                            <div class="counter-number">
+                                123.000 vnd
+                            </div>
+                            <div class="counter-label">Total Sales</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="statistics-block bg-indigo">
+                        <i class="icon fa fa-shopping-cart"></i>
+                        <div class="counter">
+                            <div class="counter-number">
+                                126
+                            </div>
+                            <div class="counter-label">Total Orders</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="statistics-block bg-light-blue">
+                        <i class="icon fa fa-user"></i>
+                        <div class="counter">
+                            <div class="counter-number">
+                                26
+                            </div>
+                            <div class="counter-label">Total Customers</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 padding-right-0">
+                    <div class="statistics-block bg-light-green">
+                        <i class="icon fa fa-users"></i>
+                        <div class="counter">
+                            <div class="counter-number">
+                                26
+                            </div>
+                            <div class="counter-label">People Onlines</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="content-panel analytics">
+                        <div class="table-header">
+                            <h4 class="header-title">Analytics</h4>
+                            <div class="datePicker-group">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default" ng-click="chartMonth()">Month</button>
+                                    <button type="button" class="btn btn-default" ng-click="chartYear()">Year</button>
+                                </div>                            
+                            </div>
+                        </div>
+
+                        <div class="report-chart">
+                            <canvas id="line" class="chart-position chart-line" chart-data="data"
+                                    chart-labels="labels" chart-options="options"
+                                    chart-dataset-override="datasetOverride">
+                            </canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="content-panel recent-orders">
+                        <div class="table-header">
+                            <h4 class="header-title">Recent Orders</h4>
+                            <a class="btn btn-add" ng-click="addOrder(ListProduct,ListStaff)">
+                                <i class="icon fa fa-plus"></i>Add New Order
+                            </a>
+                        </div>
+                        <table class="table table-advance">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Customer</th>
+                                    <th>Number</th>
+                                    <th>Status</th>
+                                    <th>Date Added</th>
+                                    <th>Order Clerk</th>
+                                    <th>Total</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-class="{'status-processed': orderModel.Status == true , 'status-pending': orderModel.Status == false}" ng-repeat="orderModel in ListOrder.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))">
+                                    <td>{{orderModel.OrderID}}</td>
+                                    <td>{{orderModel.CustomerName}}</td>
+                                    <td>0123456789</td>
+                                    <td>
+                                        <select class="form-control" ng-model="orderModel.Status" ng-options="statu.value as statu.name for statu in Status">
+                                        </select>
+                                    </td>
+                                    <td>{{orderModel.OrderDate.slice(6,19) | date:"dd/MM/yyyy 'at' h:mma"}}</td>
+                                    <td>
+                                        <select class="form-control" ng-model="orderModel.StaffID" ng-options="staff.StaffID as staff.StaffName for staff in ListStaff">
+                                           
+                                        </select>
+                                    </td>
+                                    <td>{{orderModel.TotalPrice | vndFormat}}</td>
+                                    <td>
+                                        <div class="block-icon">
+                                            <button class="btn btn-success btn-xs"  ng-click="updateOrder(orderModel)"><i class="fa fa-check"></i></button> 
+                                            <button class="btn btn-danger btn-xs" ng-click="deleteOrder(orderModel)"><i class="fa fa-trash-o"></i></button>
+                                            <button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal"><i class="fa fa-eye"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <ul uib-pagination total-items="ListOrder.length" ng-model="currentPage" class="pagination-sm" items-per-page="itemsPerPage"></ul>
+                </div>
+            </div>
+        </section>
+    </section>
+
+</section>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Order Detail</h4>
+            </div>
+            <div class="modal-body">
+                <div class="order-detail">
+                    <span class="detail-label">Order ID:</span>
+                    <span class="detail-info">2017001062222</span>
+                </div>
+                <div class="order-detail">
+                    <span class="detail-label">Customer Name:</span>
+                    <span class="detail-info">Lê Văn Anh</span>
+                </div>
+                <div class="order-detail">
+                    <span class="detail-label">Phone:</span>
+                    <span class="detail-info">0123456789</span>
+                </div>
+                <div class="order-detail">
+                    <span class="detail-label">Address:</span>
+                    <span class="detail-info">Phường 5, Bảo Lộc</span>
+                </div>
+                <div class="order-detail">
+                    <span class="detail-label">Order Cleck:</span>
+                    <span class="detail-info">Trần Thị B</span>
+                </div>
+                <div class="table-order">
+                    <table class="table table-advance">
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>LeVy 500ml</td>
+                                <td>2</td>
+                                <td>10.000</td>
+                            </tr>
+                            <tr>
+                                <td>LeVy 5l</td>
+                                <td>1</td>
+                                <td>25.000</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2">Total</td>
+                                <td>35.000</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-close" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Print Order</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/ng-template" id="myModal.html">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Thêm Đơn Hàng Mới</h4>
+        </div>
+        <div class="modal-body">
+            <form name="form">
+                <div class="customer-info">
+                    <div class="label-radio">
+                        <label class="radio-inline"><input type="radio" ng-model="checkSelection" value="1" name="optradio">Existing Customer</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Phone</label>
+                        <input type="text" name="tel" ng-disabled="isCheckboxSelected('2')" ng-model="orderModelAdd.ExitsPhone" class="form-control" id="phone" placeholder="Phone" ng-pattern="/^[0-9]*$/" required>
+                        <i class="fa fa-check text-success" ng-show="form.tel.$dirty && form.tel.$valid && isCheckboxSelected('1')"></i>
+                        <div ng-show="(TotalPrice()!='0' && isCheckboxSelected('1')) || (form.tel.$dirty && form.tel.$invalid && isCheckboxSelected('1'))" class="text-danger">
+                            <i ng-show="form.tel.$invalid" class="fa fa-times text-danger"></i>
+                            <span ng-show="form.tel.$error.required">Bạn chưa nhập số điện thoại</span>
+                            <span ng-show="form.tel.$error.pattern">Chỉ có thể nhập số</span>
+                        </div>
+                    </div>
+                    <div class="label-radio">
+                        <label class="radio-inline"><input type="radio" ng-model="checkSelection" value="2" name="optradio">New Customer</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Tên Khách Hàng</label>
+                        <input type="text" name="name" ng-disabled="isCheckboxSelected('1')" ng-model="orderModelAdd.CustomerName" class="form-control" id="name" placeholder="Tên Khách Hàng" required>
+                        <i class="fa fa-check text-success" ng-show="form.name.$dirty && form.name.$valid && isCheckboxSelected('2')"></i>
+                        <div ng-show="(TotalPrice()!='0' && isCheckboxSelected('2')) || (form.name.$dirty && form.name.$invalid && isCheckboxSelected('2'))" class="text-danger">
+                            <i ng-show="form.name.$invalid" class="fa fa-times text-danger"></i>
+                            <span ng-show="form.name.$error.required">Bạn chưa nhập tên</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" ng-disabled="isCheckboxSelected('1')" ng-model="orderModelAdd.CustomerEmail" class="form-control" id="email" placeholder="Email" required>
+                        <i class="fa fa-check text-success" ng-show="form.email.$dirty && form.email.$valid && isCheckboxSelected('2')"></i>
+                        <div ng-show="(TotalPrice()!='0' && isCheckboxSelected('2')) || (form.email.$dirty && form.email.$invalid && isCheckboxSelected('2'))" class="text-danger">
+                            <i ng-show="form.email.$invalid" class="fa fa-times text-danger"></i>
+                            <span ng-show="form.email.$error.required">Bạn chưa nhập email</span>
+                            <span ng-show="form.email.$error.email">Không đúng định dạng email</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Số điện thoại</label>
+                        <input type="tel" name="phonenumber" ng-disabled="isCheckboxSelected('1')" ng-model="orderModelAdd.PhoneNumber" class="form-control" id="phone" placeholder="Số điện thoại" ng-pattern="/^[0-9]*$/" required>
+                        <i class="fa fa-check text-success" ng-show="form.phonenumber.$dirty && form.phonenumber.$valid && isCheckboxSelected('2')"></i>
+                        <div ng-show="(TotalPrice()!='0' && isCheckboxSelected('2')) || (form.phonenumber.$dirty && form.phonenumber.$invalid && isCheckboxSelected('2'))" class="text-danger">
+                            <i ng-show="form.phonenumber.$invalid" class="fa fa-times text-danger"></i>
+                            <span ng-show="form.phonenumber.$error.required">Bạn chưa nhập số điện thoại</span>
+                            <span ng-show="form.phonenumber.$error.pattern">Chỉ có thể nhập số</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Địa chỉ</label>
+                        <input type="tel" name="address" ng-disabled="isCheckboxSelected('1')" ng-model="orderModelAdd.Address" class="form-control" id="address" placeholder="Số nhà, tên đường" required>
+                        <i class="fa fa-check text-success" ng-show="form.address.$dirty && form.address.$valid && isCheckboxSelected('2')"></i>
+                        <div ng-show="(TotalPrice()!='0' && isCheckboxSelected('2')) || (form.address.$dirty && form.address.$invalid && isCheckboxSelected('2'))" class="text-danger">
+                            <i ng-show="form.address.$invalid" class="fa fa-times text-danger"></i>
+                            <span ng-show="form.address.$error.required">Bạn chưa nhập địa chỉ</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Phường</label>
+                        <select class="form-control" name="ward" ng-disabled="isCheckboxSelected('1')" ng-model="orderModelAdd.Ward" required>
+                            <option>Phường 1</option>
+                            <option>Phường 2</option>
+                            <option>Lộc Phát</option>
+                            <option>Lộc Tiến</option>
+                            <option>Lộc Thanh</option>
+                            <option>B' Lao</option>
+                            <option>Đại Lào</option>
+                            <option>Đạm Bri</option>
+                            <option>Lộc Châu</option>
+                            <option>Lộc Nga</option>
+                            <option>Lộc Sơn</option>
+                        </select>
+                        <i class="fa fa-check text-success" ng-show="form.ward.$dirty && form.ward.$valid && isCheckboxSelected('2')"></i>
+                        <div ng-show="(TotalPrice()!='0' && isCheckboxSelected('2')) || (form.ward.$dirty && form.ward.$invalid && isCheckboxSelected('2'))" class="text-danger">
+                            <i ng-show="form.ward.$invalid" class="fa fa-times text-danger"></i>
+                            <span ng-show="form.ward.$error.required">Bạn chưa chọn phường</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-info">
+                    <div class="add-product">
+                        <div class="form-group">
+                            <label>Product</label>
+                            <select class="form-control" name="product" ng-model="AddProduct.ProductID" ng-options="product.ProductID as product.ProductName for product in ListProduct" required></select>
+                            <i class="fa fa-check text-success" ng-show="form.product.$dirty && form.product.$valid"></i>
+                            <div ng-show="form.product.$dirty && form.product.$invalid" class="text-danger">
+                                <i class="fa fa-times text-danger"></i>
+                                <span ng-show="form.product.$error.required">Bạn chưa chọn sản phẩm</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="qty">Quantity</label>
+                            <input type="tel" name="quantity" ng-model="AddProduct.Quantity" class="form-control" id="qty" placeholder="Qty" ng-pattern="/^[1-9][0-9]*$/" required>
+                            <i class="fa fa-check text-success" ng-show="form.quantity.$dirty && form.quantity.$valid"></i>
+                            <div ng-show="form.quantity.$dirty && form.quantity.$invalid" class="text-danger">
+                                <i class="fa fa-times text-danger"></i>
+                                <span ng-show="form.quantity.$error.required">Bạn chưa nhập số lượng</span>
+                                <span ng-show="form.quantity.$error.pattern">Chỉ có thể nhập số lớn hơn 0</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" ng-disabled="(!form.product.$dirty || (form.product.$dirty && form.product.$invalid)) || (!form.quantity.$dirty || (form.quantity.$dirty && form.quantity.$invalid))" ng-click="AddProductToTable(AddProduct)" class="btn btn-primary">Add</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Order Clerk</label>
+                        <select class="form-control form-inline" name="clerk" ng-model="orderModelAdd.StaffID" ng-options="staff.StaffID as staff.StaffName for staff in ListStaff"></select>
+                        @*<i class="fa fa-check text-success" ng-show="form.clerk.$dirty && form.clerk.$valid"></i>
+                            <div ng-show="form.clerk.$dirty && form.clerk.$invalid" class="text-danger">
+                                <i class="fa fa-times text-danger"></i>
+                                <span ng-show="form.clerk.$error.required">Bạn chưa chọn Clerk</span>
+                            </div>*@
+                    </div>
+                    <div class="table-order">
+                        <table class="table table-advance">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in OrderItems">
+                                    <td>{{item.name}}</td>
+                                    <td>{{item.quantity}}</td>
+                                    <td>{{item.quantity*item.price | vndFormat}}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2">Total</td>
+                                    <td>{{TotalPrice() | vndFormat}}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" ng-click="cancel()" class="btn btn-close" data-dismiss="modal">Hủy</button>
+            <button type="button" ng-click="ok()" class="btn btn-primary" ng-disabled="((!form.tel.$dirty || (form.tel.$dirty && form.tel.$invalid)) && isCheckboxSelected('1') || (TotalPrice()=='0')) || (((!form.name.$dirty || (form.name.$dirty && form.name.$invalid)) || (!form.email.$dirty || (form.email.$dirty && form.email.$invalid)) || (!form.phonenumber.$dirty || (form.phonenumber.$dirty && form.phonenumber.$invalid)) || (!form.address.$dirty || (form.address.$dirty && form.address.$invalid)) || (!form.ward.$dirty || (form.ward.$dirty && form.ward.$invalid))) && isCheckboxSelected('2') || (TotalPrice()=='0'))">Lưu</button>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="myModalDelete.html">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">Confirm</h4>
+        </div>
+        <div class="modal-body">
+            <span>Bạn có chắc chắn xóa ?</span>
+        </div>
+        <div class="modal-footer">
+            <button type="button" ng-click="cancel()" class="btn btn-close" data-dismiss="modal">Không</button>
+            <button type="button" ng-click="ok()" class="btn btn-primary">Xóa</button>
+        </div>
+    </div>
+</script>
+
+
+
+
+
+
+@section JavaScript{
+    <script src="~/Scripts/angular.js"> </script>
+    <script src="~/Scripts/angular-ui/ui-bootstrap-tpls.min.js"></script>
+    <script src="~/ScriptsNg/AdDashboardController.js"></script>
+    <script src="~/Scripts/angular-growl.js"></script>
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <script src="~/Scripts/Chart.js"></script>
+    <script src="~/Scripts/angular-chart.min.js"></script>
+    <script src="~/Scripts/utils.js"></script>
+}

@@ -1,0 +1,238 @@
+﻿
+@{
+    ViewBag.Title = "ClientOrderView";
+}
+
+<div class="contact-order-page" ng-controller="StoreController">
+    <nav class="navbar navbar-custom" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand" href="~/Home/" target="_self">
+                    <h1>Lê Vy</h1>
+                </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="~/Home/" target="_self">Trang chủ</a></li>
+                    <li><a href="about-us.html">Giới thiệu</a></li>
+                    <li><a href="~/ClientProduct/" target="_self">Sản phẩm</a></li>
+                    <li><a href="contact.html">Liên hệ</a></li>
+                    <li><a class="btn btn-primary" href="~/ClientProduct/" target="_self">Đặt nước</a></li>
+                    <li class="active">
+                        <a class="shopping-cart" href="~/ClientOrder/" target="_self">
+                            <i class="icon-cart-outline"></i>
+                            <span class="item-number">({{cart.getTotalCount()}})</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <section class="contact-container">
+        <div growl></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <div class="title">
+                        <h3>Đơn hàng <span>({{cart.getTotalCount()}})</span></h3>
+                    </div>
+
+                    <div class="order-info">
+                        <div class="order-item" ng-repeat="item in cart.items">
+                            <div class="item-img">
+                                <img ng-src="data:image/JPEG;base64,{{base64ArrayBuffer(item.image)}}">
+                            </div>
+                            <div class="item-info">
+                                <p class="item-name">{{item.name}}</p>
+                                <p class="item-price">{{item.price | vndFormat}}</p>
+                                <div class="item-quantity">
+                                    <p>Số lượng</p>
+                                    <div class="input-group touchspin">
+                                        <button class="btn btn-touchspin" type="button"
+                                                ng-disabled="item.quantity <= 1"
+                                                ng-click="cart.addItem(item.sku, item.name, item.price, item.image, -1)"
+                                                ><i class="icon-minus touchspin-up"></i>
+                                        </button>
+                                        <input type="number" name="qty" id="quantity_wanted" value="{{item.quantity}}" class="input-group form-control" min="1" max="1000"
+                                               ng-model="item.quantity" 
+                                               ng-change="cart.saveItems()">
+                                        <button class="btn btn-touchspin" type="button"
+                                                ng-disabled="item.quantity >= 1000"
+                                                ng-click="cart.addItem(item.sku, item.name, item.price, item.image, +1)"
+                                                ><i class="icon-plus touchspin-down"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sub-total">
+                                <span>{{(item.price * item.quantity) | vndFormat}}</span>
+                            </div>
+                            <div class="item-close">
+                                <a href="" ng-click="cart.addItem(item.sku, item.name, item.price, item.image, -10000000)">
+                                    <i class="icon-close-circle"></i>
+                                </a>   
+                            </div>
+                        </div>
+                        <div class="order-item total">
+                            <span class="pull-left total-text">Tổng cộng:</span>
+                            <span class="pull-right total-price">{{cart.getTotalPrice() | vndFormat}}</span>
+                        </div>
+                    </div>
+
+                    <a class="link" href="~/ClientProduct/" target="_self">< Tiếp tục mua sắm</a>
+
+                </div>
+
+                <div class="col-sm-12 col-md-6">
+                    <div class="title">
+                        <h3>Địa chỉ giao hàng</h3>
+                    </div>
+                    <form name="form">
+                        <div class="customer-info">
+                            <div class="label-radio">
+                                <label class="radio-inline"><input type="radio" name="optradio" ng-model="checkSelection" value="1" checked>Tôi đã từng đặt nước</label>
+                            </div>
+
+                            <fieldset ng-disabled="isCheckboxSelected('2')">
+                                <div class="form-group">
+                                    <input type="text" name="tel" ng-model="phoneNumber" ng-disabled="old" class="form-control" id="phone" placeholder="Điện thoại của bạn" ng-pattern="/^[0-9]*$/" required>
+                                    <i class="fa fa-check text-success" ng-show="form.tel.$dirty && form.tel.$valid && isCheckboxSelected('1')"></i>
+                                    <div ng-show="(validationFlag == '0') && form.tel.$dirty && form.tel.$invalid && isCheckboxSelected('1')" class="text-danger">
+                                        <i class="fa fa-times text-danger"></i>
+                                        <span ng-show="form.tel.$error.required">Bạn chưa nhập số điện thoại</span>
+                                        <span ng-show="form.tel.$error.pattern">Chỉ có thể nhập số  </span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <div class="label-radio">
+                                <label class="radio-inline"><input type="radio" name="optradio" ng-model="checkSelection" value="2">Tôi đặt nước lần đầu</label>
+                            </div>
+
+                            <fieldset ng-disabled="isCheckboxSelected('1')">
+                                <div class="form-group">
+                                    <input type="text" name="phonenumber" ng-model="custModel.PhoneNumber" class="form-control" id="name" placeholder="Điện thoại của bạn" ng-pattern="/^[0-9]*$/" required>
+                                    <i class="fa fa-check text-success" ng-show="form.phonenumber.$dirty && form.phonenumber.$valid && isCheckboxSelected('2')"></i>
+                                    <div ng-show="(validationFlag == '0') && form.phonenumber.$dirty && form.phonenumber.$invalid && isCheckboxSelected('2')" class="text-danger">
+                                        <i class="fa fa-times text-danger"></i>
+                                        <span ng-show="form.phonenumber.$error.required">Bạn chưa nhập số điện thoại</span>
+                                        <span ng-show="form.phonenumber.$error.pattern">Chỉ có thể nhập số  </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" name="name" ng-model="custModel.CustomerName" class="form-control" id="name" placeholder="Tên của bạn" required>
+                                    <i class="fa fa-check text-success" ng-show="form.name.$dirty && form.name.$valid && isCheckboxSelected('2')"></i>
+                                    <div ng-show="(validationFlag == '0') && form.name.$dirty && form.name.$invalid && isCheckboxSelected('2')" class="text-danger">
+                                        <i class="fa fa-times text-danger"></i>
+                                        <span ng-show="form.name.$error.required">Bạn chưa nhập tên</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" name="email" ng-model="custModel.CustomerEmail" class="form-control" id="name" placeholder="Email của bạn" required>
+                                    <i class="fa fa-check text-success" ng-show="form.email.$dirty && form.email.$valid && isCheckboxSelected('2')"></i>
+                                    <div ng-show="(validationFlag == '0') && form.email.$dirty && form.email.$invalid && isCheckboxSelected('2')" class="text-danger">
+                                        <i class="fa fa-times text-danger"></i>
+                                        <span ng-show="form.email.$error.required">Bạn chưa nhập địa chỉ email</span>
+                                        <span ng-show="form.email.$error.email">Không đúng định dạng email</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="tel" name="address" ng-model="custModel.Address" class="form-control" id="address" placeholder="Số nhà, tên đường" required>
+                                    <i class="fa fa-check text-success" ng-show="form.address.$dirty && form.address.$valid && isCheckboxSelected('2')"></i>
+                                    <div ng-show="(validationFlag == '0') && form.address.$dirty && form.address.$invalid && isCheckboxSelected('2')" class="text-danger">
+                                        <i class="fa fa-times text-danger"></i>
+                                        <span ng-show="form.address.$error.required">Bạn chưa nhập địa chỉ</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control" name="ward" ng-model="custModel.Ward" required>
+                                        <option>Phường 1</option>
+                                        <option>Phường 2</option>
+                                        <option>Lộc Phát</option>
+                                        <option>Lộc Tiến</option>
+                                        <option>Lộc Thanh</option>
+                                        <option>B' Lao</option>
+                                        <option>Đại Lào</option>
+                                        <option>Đạm Bri</option>
+                                        <option>Lộc Châu</option>
+                                        <option>Lộc Nga</option>
+                                        <option>Lộc Sơn</option>
+                                    </select>
+                                    <i class="fa fa-check text-success" ng-show="form.ward.$dirty && form.ward.$valid && isCheckboxSelected('2')"></i>
+                                    <div ng-show="(validationFlag == '0') && form.ward.$dirty && form.ward.$invalid && isCheckboxSelected('2')" class="text-danger">
+                                        <i class="fa fa-times text-danger"></i>
+                                        <span ng-show="form.ward.$error.required">Bạn chưa chọn phường</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                        </div>
+                        <button class="btn btn-primary pull-right" type="button" ng-click="checkout(phoneNumber,custModel)" ng-disabled="((!form.tel.$dirty || (form.tel.$dirty && form.tel.$invalid)) && isCheckboxSelected('1') || (cart.getTotalPrice()=='0')) || (((!form.name.$dirty || (form.name.$dirty && form.name.$invalid)) || (!form.email.$dirty || (form.email.$dirty && form.email.$invalid)) || (!form.phonenumber.$dirty || (form.phonenumber.$dirty && form.phonenumber.$invalid)) || (!form.address.$dirty || (form.address.$dirty && form.address.$invalid)) || (!form.ward.$dirty || (form.ward.$dirty && form.ward.$invalid))) && isCheckboxSelected('2') || (cart.getTotalPrice()=='0'))">Hoàn tất đặt hàng</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-2">
+                    <p class="footer-title">LÊ VY</p>
+                    <ul class="footer-nav">
+                        <li><a href="index.html">Trang Chủ</a></li>
+                        <li><a href="about-us.html">Giới Thiệu</a></li>
+                        <li><a href="product.html">Sản Phẩm</a></li>
+                        <li><a href="#">Liên Hệ</a></li>
+                        <li class="copy-right">
+                            <a class="_blank" href="index.html" target="_blank">
+                                © 2017 - LeVy
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <p class="footer-title">Theo dõi chúng tôi</p>
+                    <ul class="footer-social">
+                        <li><a href="#"><i class="icon icon-facebook"></i></a></li>
+                        <li><a href="#"><i class="icon icon-gmail"></i></a></li>
+                        <li><a href="#"><i class="icon icon-google"></i></a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <p class="footer-title">Công ty tnhh nước tinh khiết Lê Vy</p>
+                    <div class="footer-info">
+                        <div>
+                            <div class="sub-title">Địa chỉ:</div>
+                            <div class="detail">131 Trần Bình Trọng,  Lộc Thanh, Bảo Lộc</div>
+                        </div>
+                        <div>
+                            <div class="sub-title">Hotline:</div>
+                            <div class="detail">
+                                <p>(0633) 777 989</p>
+                                <p>(0633) 76 23 23</p>
+                                <p>(0886) 11 51 51</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+@section JavaScript{
+    <script src="~/Scripts/angular.js"> </script>
+    <script src="~/Scripts/angular-ui/ui-bootstrap-tpls.min.js"></script>
+    <script src="~/ScriptsNg/StoreController.js"></script>
+    <script src="~/ScriptsNg/shoppingCart.js"></script>
+    <script src="~/Scripts/angular-growl.js"></script>
+    <script src="~/Scripts/custom.js"></script>
+}
