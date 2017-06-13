@@ -73,15 +73,13 @@
             <div class="row mt">
                 <div class="col-md-12">
                     <div class="content-panel">
-                        <div class="table-header">
-                            <!--<h4 class="header-title">Customer List</h4>
-                            <a class="btn btn-add" href="#" data-toggle="modal" data-target="#myModal">
-                                <i class="icon fa fa-plus"></i>Add Customer
-                            </a>-->
-                            <div id="reportrange" class="reportRange">
+                        <div class="table-header">                          
+                            @*<div id="reportrange" class="reportRange">
                                 <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
                                 <span></span> <b class="caret pull-right"></b>
-                            </div>
+                            </div>*@
+                            <input date-range-picker id="reportrange" name="daterange3" class="reportRange" type="text"
+                                   ng-model="date" options="opts" />
                         </div>
 
                         <table class="table table-striped table-advance table-hover">
@@ -98,7 +96,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="list in ListReport">
+                                <tr ng-repeat="list in ListReport | sortDate:date">
                                     <td>{{list.OrderID}}</td>
                                     <td>{{list.CustomerName}}</td>
                                     <td>{{list.PhoneNumber}}</td>
@@ -183,35 +181,9 @@
     <script src="~/Scripts/angular-ui/ui-bootstrap-tpls.min.js"></script>
     <script src="~/Scripts/angular-growl.js"></script>
     <script src="~/ScriptsNg/AdReportController.js"></script>
+    <script src="~/Scripts/angular-daterangepicker.min.js"> </script>
     <script type="text/javascript" src="http://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="http://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
 
-<script type="text/javascript">
-$(function() {
-
-    var start = moment().subtract(29, 'days');
-    var end = moment();
-
-    function cb(start, end) {
-        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-    }
-
-    $('#reportrange').daterangepicker({
-        startDate: start,
-        endDate: end,
-        ranges: {
-           'Today': [moment(), moment()],
-           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-           'This Month': [moment().startOf('month'), moment().endOf('month')],
-           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-        }
-    }, cb);
-
-    cb(start, end);
-
-});
-</script>
 }
 

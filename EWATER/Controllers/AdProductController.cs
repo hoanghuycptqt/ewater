@@ -2,6 +2,7 @@
 using EWATER.Entity;
 using EWATER.Models;
 using EWATER.Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace EWATER.Controllers
         public JsonResult GetAllData()
         {
             int Count = 10;
-            IEnumerable<object> products = null;
+            IEnumerable<Product> products = null;
             try
             {
                 object[] parameters = {
@@ -39,7 +40,22 @@ namespace EWATER.Controllers
             }
             catch
             { }
-            return Json(products.ToList(), JsonRequestBehavior.AllowGet);
+            var listProduct = products.ToList();
+            List<ProductList> list = new List<ProductList>();
+            for(int i = 0;i<listProduct.Count;i++)
+            {
+                ProductList model = new ProductList();
+                string base64String = Convert.ToBase64String(listProduct[i].Image, 0, listProduct[i].Image.Length);
+                model.ProductID = listProduct[i].ProductID;
+                model.ProductName = listProduct[i].ProductName;
+                model.Price = listProduct[i].Price;
+                model.Image = base64String;
+
+                list.Add(model);
+            }
+            var jsonResult = Json(list, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = Int32.MaxValue;
+            return jsonResult;
         }
 
         [HttpGet]

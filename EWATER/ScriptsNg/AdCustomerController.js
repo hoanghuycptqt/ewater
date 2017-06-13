@@ -35,7 +35,6 @@ app.controller('AdCustomerController', function ($scope, $http, $location, $wind
 
         $http.get('/AdCustomer/GetbyID/' + custModel.CustomerID).then(successCallback, errorCallback);
         function successCallback(data) {
-            debugger;
             $scope.custModel = data.data;
             getallData();
         }

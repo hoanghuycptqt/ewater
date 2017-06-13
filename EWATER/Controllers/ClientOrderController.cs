@@ -62,6 +62,22 @@ namespace EWATER.Controllers
             });
         }
 
+        [HttpGet]
+        public JsonResult GetbyOrderID(string phoneNumber)
+        {
+            object order = null;
+            try
+            {
+                object[] parameters = {
+                phoneNumber
+            };
+                order = this.objOrder.GetbyID(parameters);
+            }
+            catch
+            { }
+            return Json(order, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpDelete]
         public JsonResult Delete(string phoneNumber)
         {

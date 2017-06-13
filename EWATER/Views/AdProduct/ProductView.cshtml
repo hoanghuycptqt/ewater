@@ -96,7 +96,7 @@
                                     <td>{{productModel.ProductID}}</td>
                                     <td>{{productModel.ProductName}}</td>
                                     <td class="product-img">
-                                        <img ng-src="data:image/JPEG;base64,{{base64ArrayBuffer(productModel.Image)}}">
+                                        <img ng-src="data:image/JPEG;base64,{{productModel.Image}}">
                                     </td>
                                     <td>{{productModel.Price | vndFormat}}</td>
                                     <td>

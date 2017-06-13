@@ -171,6 +171,7 @@
     <Compile Include="Entity\OrderEntity.cs" />
     <Compile Include="Entity\ProductAdd.cs" />
     <Compile Include="Entity\ProductEntity.cs" />
+    <Compile Include="Entity\ProductList.cs" />
     <Compile Include="Entity\ReportEntity.cs" />
     <Compile Include="Entity\YearChart.cs" />
     <Compile Include="Global.asax.cs">
@@ -286,6 +287,8 @@
     <Content Include="Content\vendors\bootstrap.min.css" />
     <Content Include="ScriptsNg\AdDashboardController.js" />
     <Content Include="ScriptsNg\AdReportController.js" />
+    <Content Include="Scripts\angular-chart.min.js" />
+    <Content Include="Scripts\angular-daterangepicker.min.js" />
     <Content Include="Scripts\Chart.js" />
     <Content Include="Content\vendors\style-responsive.css" />
     <Content Include="Content\vendors\to-do.css" />

@@ -1,4 +1,5 @@
 ﻿using EWATER.DAL;
+using EWATER.Entity;
 using EWATER.Models;
 using EWATER.Repository;
 using System;
@@ -13,11 +14,13 @@ namespace EWATER.Services
     public partial class ClientOrderService
     {
         private GenericRepository<Order> OrderRepository;
-        private GenericRepository<OrderItem> OrderItemRepository;
+        private GenericRepository<Models.OrderItem> OrderItemRepository;
+        private GenericRepository<ReportEntity> ReportRepository;
         public ClientOrderService()
         {
             this.OrderRepository = new GenericRepository<Order>(new EWaterContext());
-            this.OrderItemRepository = new GenericRepository<OrderItem>(new EWaterContext());
+            this.OrderItemRepository = new GenericRepository<Models.OrderItem>(new EWaterContext());
+            this.ReportRepository = new GenericRepository<ReportEntity>(new EWaterContext());
         }
 
         public int InsertOrder(object[] parameters)
@@ -78,6 +81,24 @@ namespace EWATER.Services
             }
                
             return flag;
+        }
+
+        public IEnumerable<ReportEntity> GetbyID(object[] parameters)
+        {
+            StringBuilder spQuery = new StringBuilder();
+            spQuery.Append("SELECT a.OrderID,c.CustomerName,c.PhoneNumber,c.Address,d.ProductName,b.Quantity,b.Price,e.StaffName,a.OrderDate ");
+            spQuery.Append("FROM [Order] a ");
+            spQuery.Append("INNER JOIN OrderItem b ");
+            spQuery.Append("on a.OrderID=b.OrderID ");
+            spQuery.Append("INNER JOIN Customer c ");
+            spQuery.Append("on a.CustomerID = c.CustomerID ");
+            spQuery.Append("INNER JOIN Product d ");
+            spQuery.Append("on b.ProductID = d.ProductID ");
+            spQuery.Append("LEFT JOIN Staff e ");
+            spQuery.Append("on a.StaffID = e.StaffID ");
+            spQuery.Append("WHERE a.OrderID ={0}");
+
+            return ReportRepository.ExecuteQuery(spQuery.ToString(), parameters);
         }
 
         public int Delete(object[] parameters)
