@@ -16,6 +16,7 @@ namespace EWATER.DAL
         public DbSet<Staff> Staffs { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<ContactClient> ContactClients { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

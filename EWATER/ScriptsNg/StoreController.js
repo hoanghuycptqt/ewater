@@ -26,6 +26,7 @@ app.factory("DataService", function () {
 app.controller('StoreController', function ($scope, $http, $location, $window, $uibModal, growl, DataService) {
     $scope.productModel = {};
     $scope.custModel = {};
+    $scope.contactModel = {};
     $scope.ListProduct = null;
     $scope.phoneNumber = null;
     getallData();
@@ -52,6 +53,31 @@ app.controller('StoreController', function ($scope, $http, $location, $window, $
         function errorCallback(data) {
             growl.error("Có lỗi trong quá trình gọi xử lý đến server");
         }
+    };
+
+    $scope.sendContact = function(contactModel) {
+        $http(
+        {
+            method: 'POST',
+            url: '/ContactClient/Send',
+            data: contactModel
+        }).then(successCallback, errorCallback);
+
+        function successCallback(data) {
+            if (data.data.success === true) {
+                
+                growl.success(data.data.message);
+                alert("Thanks for your contact!");
+                $window.location.href = '/Home';
+            }
+            else {
+                growl.error(data.data.message);
+            }
+        }
+        function errorCallback(data) {
+            growl.error("Có lỗi trong quá trình gọi xử lý đến server");
+        }
+
     };
 
     $scope.checkout = function (phoneNumber, custModel) {

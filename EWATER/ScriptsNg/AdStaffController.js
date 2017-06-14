@@ -29,18 +29,7 @@ app.controller('AdStaffController', function ($scope, $http, $location, $window,
         }
     };
     //******=========Get Single Customer=========******  
-    function getStaff(staffModel) {
-
-        $http.get('/AdStaff/GetbyID/' + staffModel.StaffID).then(successCallback, errorCallback);
-        function successCallback(data) {
-            debugger;
-            $scope.staffModel = data.data;
-            getallData();
-        }
-        function errorCallback(data) {
-            growl.error("Có lỗi trong quá trình gọi xử lý đến server");
-        }
-    };
+   
     //******=========Save Customer=========******  
     function saveStaff(staffModel) {
         $http(
@@ -120,7 +109,7 @@ app.controller('AdStaffController', function ($scope, $http, $location, $window,
     };
 
     $scope.updateStaff = function (staffModel) {
-        getStaff(staffModel);
+
         var modalInstance = $uibModal.open({
             templateUrl: 'myModal.html',
             controller: 'UpdateStaff',

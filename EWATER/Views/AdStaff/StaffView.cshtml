@@ -60,6 +60,12 @@
                         <span>Report</span>
                     </a>
                 </li>
+                <li>
+                    <a href="~/AdContact/" target="_self">
+                        <i class="fa fa-phone"></i>
+                        <span>Contact</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </aside>
@@ -98,7 +104,7 @@
                                     <td>{{staffModel.StaffEmail}}</td>
                                     <td>{{staffModel.StaffPhone}}</td>
                                     <td>{{staffModel.JobTitle}}</td>
-                                    <td>22000.50$ </td>
+                                    <td>{{staffModel.TotalSales | vndFormat}}</td>
                                     <td>
                                         <button ng-click="updateStaff(staffModel)" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></button>
                                         <button ng-click="deleteStaff(staffModel)" class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button>

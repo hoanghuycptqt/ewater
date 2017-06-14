@@ -157,6 +157,8 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Common\Constants.cs" />
+    <Compile Include="Controllers\AboutUsController.cs" />
+    <Compile Include="Controllers\AdContactController.cs" />
     <Compile Include="Controllers\AdCustomerController.cs" />
     <Compile Include="Controllers\AdDashboardController.cs" />
     <Compile Include="Controllers\AdProductController.cs" />
@@ -164,8 +166,11 @@
     <Compile Include="Controllers\AdStaffController.cs" />
     <Compile Include="Controllers\ClientOrderController.cs" />
     <Compile Include="Controllers\ClientProductController.cs" />
+    <Compile Include="Controllers\ContactClientController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DAL\EWaterContext.cs" />
+    <Compile Include="Entity\AllTotal.cs" />
+    <Compile Include="Entity\CustomerEntity.cs" />
     <Compile Include="Entity\MonthChart.cs" />
     <Compile Include="Entity\OrderRecent.cs" />
     <Compile Include="Entity\OrderEntity.cs" />
@@ -173,11 +178,13 @@
     <Compile Include="Entity\ProductEntity.cs" />
     <Compile Include="Entity\ProductList.cs" />
     <Compile Include="Entity\ReportEntity.cs" />
+    <Compile Include="Entity\StaffEntity.cs" />
     <Compile Include="Entity\YearChart.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="IRepository\IRepository.cs" />
+    <Compile Include="Models\ContactClient.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderItem.cs" />
@@ -192,6 +199,7 @@
     <Compile Include="Services\AdStaffService.cs" />
     <Compile Include="Services\ClientOrderService.cs" />
     <Compile Include="Services\ClientProductService.cs" />
+    <Compile Include="Services\ContactService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\angular-growl.css" />
@@ -262,6 +270,7 @@
     <Content Include="Content\media\boxpic3.jpg" />
     <Content Include="Content\media\woods.jpg" />
     <Content Include="Content\media\woods.mp4" />
+    <Content Include="Content\angularPrint.css" />
     <Content Include="Content\pages\contact-order.css" />
     <Content Include="Content\pages\contact-order.min.css" />
     <Content Include="Content\pages\dashboard.css" />
@@ -285,6 +294,7 @@
     <Content Include="Content\ui-bootstrap-csp.css" />
     <Content Include="Content\vendors\bootstrap.css" />
     <Content Include="Content\vendors\bootstrap.min.css" />
+    <Content Include="ScriptsNg\AdContactController.js" />
     <Content Include="ScriptsNg\AdDashboardController.js" />
     <Content Include="ScriptsNg\AdReportController.js" />
     <Content Include="Scripts\angular-chart.min.js" />
@@ -292,6 +302,7 @@
     <Content Include="Scripts\Chart.js" />
     <Content Include="Content\vendors\style-responsive.css" />
     <Content Include="Content\vendors\to-do.css" />
+    <Content Include="Scripts\angularPrint.js" />
     <Content Include="Scripts\utils.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -418,6 +429,9 @@
     <Content Include="Views\ClientOrder\ClientOrderView.cshtml" />
     <Content Include="Views\AdDashboard\DashboardView.cshtml" />
     <Content Include="Views\AdReport\ReportView.cshtml" />
+    <Content Include="Views\ContactClient\ContactClientView.cshtml" />
+    <Content Include="Views\AdContact\AdContactView.cshtml" />
+    <Content Include="Views\AboutUs\AboutUsView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,177 @@
+﻿
+@{
+    ViewBag.Title = "ContactClientView";
+}
+
+<div class="page-contact" ng-controller="StoreController">
+    <nav class="navbar navbar-custom" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand" href="~/Home/" target="_self">
+                    <h1>Lê Vy</h1>
+                </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="~/Home/" target="_self">Trang chủ</a></li>
+                    <li><a href="~/AboutUs/" target="_self">Giới thiệu</a></li>
+                    <li><a href="~/ClientProduct/" target="_self">Sản phẩm</a></li>
+                    <li class="active"><a href="~/ContactClient/" target="_self">Liên hệ</a></li>
+                    <li><a class="btn btn-primary" href="~/ClientProduct/" target="_self">Đặt nước</a></li>
+                    <li>
+                        <a class="shopping-cart" href="~/ClientOrder/" target="_self">
+                            <i class="icon-cart-outline"></i>
+                            <span class="item-number">({{cart.getTotalCount()}})</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <section class="contact-container">
+        <div class="container">
+            <div class="title">
+                <h3>Liên hệ</h3>
+                <div class="sub-title">Chúng tôi sẵn sàng lắng nghe bạn. Vui lòng liên hệ với chúng tôi bằng một trong những cách sau:</div>
+            </div>
+            <div class="row">
+                <form name="form">
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    <label for="name">Tên của bạn</label>
+                                    <input type="text" name="name" ng-model="contactModel.Name" class="form-control" id="name" placeholder="Tên" required>
+                                    <i class="fa fa-check text-success" ng-show="form.name.$dirty && form.name.$valid"></i>
+                                    <div ng-show="form.name.$dirty && form.name.$invalid" class="text-danger">
+                                        <i class="fa fa-times text-danger"></i>
+                                        <span ng-show="form.name.$error.required">Bạn chưa nhập tên</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    <label for="phone">Số điện thoại</label>
+                                    <input type="text" name="tel" ng-model="contactModel.Phone" class="form-control" id="phone" placeholder="Số điện thoại" ng-pattern="/^[0-9]*$/" required>
+                                    <i class="fa fa-check text-success" ng-show="form.tel.$dirty && form.tel.$valid"></i>
+                                    <div ng-show="form.tel.$dirty && form.tel.$invalid" class="text-danger">
+                                        <i class="fa fa-times text-danger"></i>
+                                        <span ng-show="form.tel.$error.required">Bạn chưa nhập số điện thoại</span>
+                                        <span ng-show="form.tel.$error.pattern">Chỉ có thể nhập số  </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" name="email" ng-model="contactModel.Email" class="form-control" id="email" placeholder="Email" required>
+                                    <i class="fa fa-check text-success" ng-show="form.email.$dirty && form.email.$valid"></i>
+                                    <div ng-show="form.email.$dirty && form.email.$invalid" class="text-danger">
+                                        <i class="fa fa-times text-danger"></i>
+                                        <span ng-show="form.email.$error.required">Bạn chưa nhập địa chỉ email</span>
+                                        <span ng-show="form.email.$error.email">Không đúng định dạng email</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="email">Nội dung</label>
+                                    <textarea name="content" ng-model="contactModel.Content" class="form-control" rows="5" required></textarea>
+                                    <i class="fa fa-check text-success" ng-show="form.content.$dirty && form.content.$valid"></i>
+                                    <div ng-show="form.content.$dirty && form.content.$invalid" class="text-danger">
+                                        <i class="fa fa-times text-danger"></i>
+                                        <span ng-show="form.content.$error.required">Bạn chưa nội dung</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary pull-right" ng-disabled="!form.$dirty || (form.$dirty && form.$invalid)" ng-click="sendContact(contactModel)" type="button">Gửi</button>
+                    </div>
+                </form>
+                    <div class="col-md-4">
+                        <div class="sidebox">
+                            <div class="location-box">
+                                <h4 class="title">HOTLINE:</h4>
+                                <div class="sub-title">
+                                    <p>(0633) 777 989</p>
+                                    <p>(0633) 76 23 23</p>
+                                    <p>(0886) 11 51 51</p>
+                                </div>
+                            </div>
+                            <div class="location-box">
+                                <h4 class="title">Công ty TNHH nước tinh khiết lê vy</h4>
+                                <div class="info">
+                                    <p>131 Trần Bình Trọng,  Lộc Thanh, Bảo Lộc</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+</div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-2">
+                    <p class="footer-title">LÊ VY</p>
+                    <ul class="footer-nav">
+                        <li><a href="~/Home/" target="_self">Trang Chủ</a></li>
+                        <li><a href="~/AboutUs/" target="_self">Giới Thiệu</a></li>
+                        <li><a href="~/ClientProduct/" target="_self">Sản Phẩm</a></li>
+                        <li><a href="~/ContactClient/" target="_self">Liên Hệ</a></li>
+                        <li class="copy-right">
+                            <a class="_blank" href="~/Home/" target="_self">
+                                © 2017 - LeVy
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <p class="footer-title">Theo dõi chúng tôi</p>
+                    <ul class="footer-social">
+                        <li><a href="#"><i class="icon icon-facebook"></i></a></li>
+                        <li><a href="#"><i class="icon icon-gmail"></i></a></li>
+                        <li><a href="#"><i class="icon icon-google"></i></a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <p class="footer-title">Công ty tnhh nước tinh khiết Lê Vy</p>
+                    <div class="footer-info">
+                        <div>
+                            <div class="sub-title">Địa chỉ:</div>
+                            <div class="detail">131 Trần Bình Trọng,  Lộc Thanh, Bảo Lộc</div>
+                        </div>
+                        <div>
+                            <div class="sub-title">Hotline:</div>
+                            <div class="detail">
+                                <p>(0633) 777 989</p>
+                                <p>(0633) 76 23 23</p>
+                                <p>(0886) 11 51 51</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+@section JavaScript{
+    <script src="~/Scripts/angular.js"> </script>
+    <script src="~/Scripts/angular-ui/ui-bootstrap-tpls.min.js"></script>
+    <script src="~/ScriptsNg/StoreController.js"></script>
+    <script src="~/ScriptsNg/shoppingCart.js"></script>
+    <script src="~/Scripts/angular-growl.js"></script>
+    <script src="~/Scripts/custom.js"></script>
+}

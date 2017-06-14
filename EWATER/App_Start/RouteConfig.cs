@@ -18,12 +18,28 @@ namespace EWATER
               "AdReport/{action}",
               new { controller = "AdReport", action = "ReportView" }
           );
+            routes.MapRoute(
+             "AboutUs",
+             "AboutUs/{action}",
+             new { controller = "AboutUs", action = "AboutUsView" }
+         );
 
             routes.MapRoute(
                "AdDashboard",
                "AdDashboard/{action}/{date}",
                new { controller = "AdDashboard", action = "DashboardView", date = UrlParameter.Optional }
            );
+
+            routes.MapRoute(
+              "ContactClient",
+              "ContactClient/{action}",
+              new { controller = "ContactClient", action = "ContactClientView" }
+          );
+            routes.MapRoute(
+             "AdContact",
+             "AdContact/{action}",
+             new { controller = "AdContact", action = "AdContactView" }
+         );
 
             routes.MapRoute(
                "ClientOrder",

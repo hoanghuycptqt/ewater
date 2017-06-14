@@ -1,4 +1,4 @@
-﻿var app = angular.module('myFormApp', ['ui.bootstrap', 'angular-growl', 'chart.js']);
+﻿var app = angular.module('myFormApp', ['ui.bootstrap', 'angular-growl', 'chart.js', 'AngularPrint']);
 
 app.config(['growlProvider', function (growlProvider, $routeProvider) {
     growlProvider.globalTimeToLive(1500);
@@ -16,12 +16,14 @@ app.controller('AdDashboardController', function ($scope, $http, $location, $win
     $scope.isDisabled = true;
     $scope.isDisabledEdit = false;
     $scope.orderModel = {};
+    $scope.allTotal = {};
     $scope.productID = null;
     $scope.orderModelAdd = {};
     $scope.ListOrder = null;
     $scope.ListStaff = null;
     $scope.ListProduct = null;
     $scope.Status = [{ value: true, name: 'Processed' }, { value: false, name: 'Pending' }];
+    getTotal();
     getallData();
     getallStaff();
     getallProduct();
@@ -38,7 +40,35 @@ app.controller('AdDashboardController', function ($scope, $http, $location, $win
         $http.get('/AdDashboard/GetAllData').then(successCallback, errorCallback);
 
         function successCallback(data) {
-            $scope.ListOrder = data.data;
+            var ListReportAll = [];
+            var OrderIDOld = '';
+            for (var i = 0; i < data.data.length; i++) {
+                if (data.data[i].OrderID != OrderIDOld) {
+                    var ListReportFinal = new Object();
+                    ListReportFinal.OrderID = data.data[i].OrderID;
+                    ListReportFinal.CustomerName = data.data[i].CustomerName;
+                    ListReportFinal.PhoneNumber = data.data[i].PhoneNumber;
+                    ListReportFinal.Address = data.data[i].Address;
+                    ListReportFinal.StaffName = data.data[i].StaffName;
+                    ListReportFinal.StaffID = data.data[i].StaffID;
+                    ListReportFinal.OrderDate = data.data[i].OrderDate;
+                    ListReportFinal.TotalPrice = data.data[i].TotalPrice;
+                    ListReportFinal.Status = data.data[i].Status;
+                    ListReportFinal.ListProduct = [];
+                    for (var j = 0; j < data.data.length; j++) {
+                        if (ListReportFinal.OrderID == data.data[j].OrderID) {
+                            var item = new Object();
+                            item.ProductName = data.data[j].ProductName;
+                            item.Quantity = data.data[j].Quantity;
+                            item.Price = data.data[j].Price;
+                            ListReportFinal.ListProduct.push(item);
+                        }
+                    }
+                    ListReportAll.push(ListReportFinal);
+                    OrderIDOld = data.data[i].OrderID;
+                }
+            }
+            $scope.ListOrder = ListReportAll;
 
         }
         function errorCallback(data) {
@@ -46,38 +76,12 @@ app.controller('AdDashboardController', function ($scope, $http, $location, $win
         }
     };
 
-    function getOrderDetail(OrderID) {
-        var id = OrderID.toString();
-        $http.get('/ClientOrder/GetbyOrderID/' + id).then(successCallback, errorCallback);
+    function getTotal() {
+        $http.get('/AdDashboard/GetAllTotal').then(successCallback, errorCallback);
 
         function successCallback(data) {
-           
-                var ListReportAll = [];
-                var OrderIDOld = '';
-                for (var i = 0; i < data.data.length; i++) {
-                    if (data.data[i].OrderID != OrderIDOld) {
-                        var ListReportFinal = new Object();
-                        ListReportFinal.OrderID = data.data[i].OrderID;
-                        ListReportFinal.CustomerName = data.data[i].CustomerName;
-                        ListReportFinal.PhoneNumber = data.data[i].PhoneNumber;
-                        ListReportFinal.Address = data.data[i].Address;
-                        ListReportFinal.StaffName = data.data[i].StaffName;
-                        ListReportFinal.ListProduct = [];
-                        for (var j = 0; j < data.data.length; j++) {
-                            if (ListReportFinal.OrderID == data.data[j].OrderID) {
-                                var item = new Object();
-                                item.ProductName = data.data[j].ProductName;
-                                item.Quantity = data.data[j].Quantity;
-                                item.Price = data.data[j].Price;
-                                ListReportFinal.ListProduct.push(item);
-                            }
-                        }
-                        ListReportAll.push(ListReportFinal);
-                        OrderIDOld = data.data[i].OrderID;
-                    }
-                }
-                $scope.OrderDetail = ListReportAll[0];
-    
+            $scope.allTotal = data.data;
+
         }
         function errorCallback(data) {
             growl.error("Có lỗi trong quá trình gọi xử lý đến server");
@@ -318,15 +322,14 @@ app.controller('AdDashboardController', function ($scope, $http, $location, $win
 
     };
 
-    $scope.printOrder = function (OrderID) {
-        getOrderDetail(OrderID);
+    $scope.printOrder = function (orderModel) {
        
         var modalInstance = $uibModal.open({
             templateUrl: 'modalDetail.html',
             controller: 'PrintOrder',
             resolve: {
                 orderDetail: function () {
-                    return $scope.orderDetail = $scope.OrderDetail;
+                    return $scope.orderDetail = orderModel;
                 }
             }
         });

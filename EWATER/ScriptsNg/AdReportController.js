@@ -28,6 +28,8 @@ app.controller('AdReportController', function ($scope, $http, $location, $window
     $scope.reportModel = {};
     $scope.ListReport = [];
     getallData();
+    $scope.currentPage = 1;
+    $scope.itemsPerPage = 50;
     $scope.date = {
         startDate: moment().subtract(29, "days"),
         endDate: moment()

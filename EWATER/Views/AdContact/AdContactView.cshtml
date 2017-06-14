@@ -1,9 +1,9 @@
 ﻿
 @{
-    ViewBag.Title = "ReportView";
+    ViewBag.Title = "AdContactView";
 }
 
-<section id="container" ng-controller="AdReportController">
+<section id="container" ng-controller="AdContactController">
     <!-- **********************************************************************************************************************************************************
     TOP BAR CONTENT & NOTIFICATIONS
     *********************************************************************************************************************************************************** -->
@@ -37,7 +37,7 @@
                     </a>
                 </li>
                 <li>
-                    <a class="" href="~/AdProduct/" target="_self">
+                    <a href="~/AdProduct/" target="_self">
                         <i class="fa fa-list"></i>
                         <span>Product</span>
                     </a>
@@ -55,13 +55,13 @@
                     </a>
                 </li>
                 <li>
-                    <a class="active" href="~/AdReport/" target="_self">
+                    <a href="~/AdReport/" target="_self">
                         <i class="fa fa-table"></i>
                         <span>Report</span>
                     </a>
                 </li>
                 <li>
-                    <a href="~/AdContact/" target="_self">
+                    <a class="active" href="~/AdContact/" target="_self">
                         <i class="fa fa-phone"></i>
                         <span>Contact</span>
                     </a>
@@ -76,16 +76,12 @@
     <!--main content start-->
     <section id="main-content">
         <section class="wrapper">
+            <div growl></div>
             <div class="row mt">
                 <div class="col-md-12">
                     <div class="content-panel">
-                        <div class="table-header">                          
-                            @*<div id="reportrange" class="reportRange">
-                                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-                                <span></span> <b class="caret pull-right"></b>
-                            </div>*@
-                            <input date-range-picker id="reportrange" name="daterange3" class="reportRange" type="text"
-                                   ng-model="date" options="opts" />
+                        <div class="table-header">
+                            <h4 class="header-title">Customer Contact</h4>
                         </div>
 
                         <table class="table table-striped table-advance table-hover">
@@ -94,49 +90,35 @@
                                     <th>#</th>
                                     <th>Customer Name</th>
                                     <th>Phone</th>
-                                    <th>Address</th>
-                                    <th>Product Order Detail
-                                        (Product Name -	Quantity - Price)
-                                    </th>
-                                    <th>Order Cleck</th>
+                                    <th>Email</th>
+                                    <th>Content</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="list in (ListReport | sortDate:date).slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))">
-                                    <td>{{list.OrderID}}</td>
-                                    <td>{{list.CustomerName}}</td>
-                                    <td>{{list.PhoneNumber}}</td>
-                                    <td>{{list.Address}}</td>
-                                    <td class="report-order-detail">
-                                        <p ng-repeat="listItem in list.ListProduct">
-                                            <span class="name">{{listItem.ProductName}}</span>
-                                            <span class="qty">{{listItem.Quantity}}</span>
-                                            <span class="price">{{listItem.Price | vndFormat}}</span>
-                                        </p>
-                                    </td>
-                                    <td>{{list.StaffName}}</td>
+                                <tr ng-repeat="contact in ListContact.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))">
+                                    <td>{{contact.ContactClientID}}</td>
+                                    <td>{{contact.Name}}</td>
+                                    <td>{{contact.Phone}}</td>
+                                    <td>{{contact.Email}}</td>
+                                    <td>{{contact.Content}}</td>
                                 </tr>
                             </tbody>
-                        </table>  
+                        </table>
                     </div>
-                    <ul uib-pagination total-items="(ListReport | sortDate:date).length" ng-model="currentPage" class="pagination-sm" items-per-page="itemsPerPage"></ul>
+                    <ul uib-pagination total-items="ListContact.length" ng-model="currentPage" class="pagination-sm" items-per-page="itemsPerPage"></ul>
                 </div>
             </div>
 
         </section>
     </section>
+
+
 </section>
-
-
 
 @section JavaScript{
     <script src="~/Scripts/angular.js"> </script>
     <script src="~/Scripts/angular-ui/ui-bootstrap-tpls.min.js"></script>
+    <script src="~/ScriptsNg/AdContactController.js"></script>
     <script src="~/Scripts/angular-growl.js"></script>
-    <script src="~/ScriptsNg/AdReportController.js"></script>
-    <script src="~/Scripts/angular-daterangepicker.min.js"> </script>
-    <script type="text/javascript" src="http://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="http://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-
 }
 

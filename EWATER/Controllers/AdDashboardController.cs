@@ -10,7 +10,7 @@ using System.Web.Mvc;
 namespace EWATER.Controllers
 {
     public class AdDashboardController : Controller
-    {
+    {        
         private AdDashboardService objOrder;
         public AdDashboardController()
         {
@@ -20,6 +20,23 @@ namespace EWATER.Controllers
         public ActionResult DashboardView()
         {
             return View();
+        }
+
+        [HttpGet]
+        public JsonResult GetAllTotal()
+        {
+            int id = 10;
+            object allTotal = null;
+            try
+            {
+                object[] parameters = {
+                id
+            };
+                allTotal = this.objOrder.GetAllTotal(parameters);
+            }
+            catch
+            { }
+            return Json(allTotal, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]

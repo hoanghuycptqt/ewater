@@ -1,4 +1,5 @@
 ﻿using EWATER.DAL;
+using EWATER.Entity;
 using EWATER.Models;
 using EWATER.Repository;
 using System;
@@ -12,17 +13,27 @@ namespace EWATER.Services
     public partial class AdStaffService
     {
         private GenericRepository<Staff> StaffRepository;
+        private GenericRepository<StaffEntity> StaffEntityRepository;
         public AdStaffService()
         {
             this.StaffRepository = new GenericRepository<Staff>(new EWaterContext());
+            this.StaffEntityRepository = new GenericRepository<StaffEntity>(new EWaterContext());
         }
-        public IEnumerable<Staff> GetAll(object[] parameters)
+        public IEnumerable<StaffEntity> GetAll(object[] parameters)
         {
             StringBuilder spQuery = new StringBuilder();
-            spQuery.Append("SELECT * ");
-            spQuery.Append("FROM Staff");
+            spQuery.Append("SELECT d.StaffID,d.StaffName,d.StaffEmail,d.StaffPhone,d.JobTitle,isnull(c.TotalSales, 0) as TotalSales ");
+            spQuery.Append("FROM( ");
+            spQuery.Append("SELECT a.StaffID, SUM(b.Price*b.Quantity) AS TotalSales ");
+            spQuery.Append("FROM [Order] a ");
+            spQuery.Append("INNER JOIN OrderItem b ");
+            spQuery.Append("on a.OrderID = b.OrderID ");
+            spQuery.Append("WHERE a.StaffID IS NOT NULL ");
+            spQuery.Append("GROUP BY a.StaffID) c ");
+            spQuery.Append("RIGHT JOIN Staff d ");
+            spQuery.Append("on c.StaffID = d.StaffID ");
 
-            return StaffRepository.ExecuteQuery(spQuery.ToString(), parameters);
+            return StaffEntityRepository.ExecuteQuery(spQuery.ToString(), parameters);
         }
         public Staff GetbyID(object[] parameters)
         {

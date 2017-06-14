@@ -29,18 +29,7 @@ app.controller('AdProductController', function ($scope, $http, $location, $windo
         }
     };
     //******=========Get Single Customer=========******  
-    function getProduct(productModel) {
-
-        $http.get('/AdProduct/GetbyID/' + productModel.ProductID).then(successCallback, errorCallback);
-        function successCallback(data) {
-            debugger;
-            $scope.productModel = data.data;
-            getallData();
-        }
-        function errorCallback(data) {
-            growl.error("Có lỗi trong quá trình gọi xử lý đến server");
-        }
-    };
+   
     //******=========Save Customer=========******  
     function saveCustomer(productModel) {
         var getModelAsFormData = function (data) {
@@ -138,7 +127,7 @@ app.controller('AdProductController', function ($scope, $http, $location, $windo
     };
 
     $scope.updateProduct = function (productModel) {
-        getProduct(productModel);
+        
         var modalInstance = $uibModal.open({
             templateUrl: 'myModal.html',
             controller: 'UpdateProduct',
